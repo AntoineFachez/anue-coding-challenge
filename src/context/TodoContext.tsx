@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { mockTodoListData } from '../mockData/mockData';
 
 interface Todo {
@@ -8,10 +8,16 @@ interface Todo {
   status: 'pending' | 'completed';
   createdAt: string;
 }
-
+const scheme: Todo = {
+  itemName: 'Go for a run',
+  status: 'pending',
+  createdAt: new Date().toISOString(),
+  id: crypto.randomUUID(),
+};
 interface TodoContextType {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  // scheme: scheme;
 }
 
 const initialTodos: Todo[] = mockTodoListData;
@@ -19,6 +25,7 @@ const initialTodos: Todo[] = mockTodoListData;
 const TodoContext = createContext<TodoContextType>({
   todos: initialTodos,
   setTodos: () => {},
+  // scheme: scheme,
 });
 
 const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -26,9 +33,33 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   // Explicitly type 'children'
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
+  const [data, setData] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/api/toDos');
+        const data = await response.text();
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        // Handle the error, e.g., set an error state or display an error message
+
+        setData('Error fetching data');
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
-    <TodoContext.Provider value={{ todos, setTodos }}>
+    <TodoContext.Provider
+      value={{
+        todos,
+        setTodos,
+        // scheme
+      }}
+    >
       {children}
     </TodoContext.Provider>
   );

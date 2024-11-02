@@ -6,11 +6,19 @@ interface Alert {
   note: string;
 }
 // Helper function to get the current todos from localStorage
-const getTodosFromLS = (key: string): Todo[] => {
-  const lsItems = localStorage.getItem(key);
-  return lsItems ? JSON.parse(lsItems) : [];
+export const getTodosFromLS = (key: string): Todo[] => {
+  try {
+    // Add try-catch block here
+    const lsItems = localStorage.getItem(key);
+    return lsItems ? JSON.parse(lsItems) : [];
+  } catch (error) {
+    console.error('Error accessing localStorage:', error);
+    return []; // Return an empty array in case of an error
+  }
 };
 export const handleSetLSItem = (key: string, newTodo: Todo) => {
+  // console.log(newTodo);
+
   try {
     const todos = getTodosFromLS(key);
 

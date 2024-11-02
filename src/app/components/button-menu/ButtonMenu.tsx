@@ -2,16 +2,11 @@ import React from 'react';
 import { handleRemoveLSItem, handleSetLSItem } from '../../../utils/ls';
 import Button from '../button/Button';
 import { Todo } from '@/context/TodoContext';
+import { Delete, Save, Store } from '@mui/icons-material';
 
 interface MyButtonProps {
   data: Todo;
 }
-const newTodo: Todo = {
-  itemName: 'Go for a run',
-  status: 'pending',
-  createdAt: new Date().toISOString(),
-  id: crypto.randomUUID(),
-};
 
 const MyButton: React.FC<MyButtonProps> = ({ data }) => {
   const handleSetItem = (action: string) => {
@@ -29,10 +24,12 @@ const MyButton: React.FC<MyButtonProps> = ({ data }) => {
       <Button
         onClickHandler={() => handleSetItem('set')}
         innerHtml="Store Value"
+        icon={<Save />}
       />
       <Button
         onClickHandler={() => handleSetItem('delete')}
         innerHtml="Delete Value"
+        icon={<Delete />}
       />
     </div>
   );
