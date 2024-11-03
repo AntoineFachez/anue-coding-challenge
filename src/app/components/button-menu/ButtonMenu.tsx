@@ -20,7 +20,7 @@ const MyButton: React.FC<MyButtonProps> = ({ data }) => {
   };
 
   return (
-    <div>
+    <>
       <Button
         onClickHandler={() => handleSetItem('set')}
         innerHtml="Store Value"
@@ -31,7 +31,7 @@ const MyButton: React.FC<MyButtonProps> = ({ data }) => {
         innerHtml="Delete Value"
         icon={<Delete />}
       />
-    </div>
+    </>
   );
 };
 

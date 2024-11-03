@@ -1,40 +1,57 @@
 'use client';
 
-import React from 'react';
+import React, { useContext } from 'react';
 import ButtonMenu from '../button-menu/ButtonMenu';
-import { Todo } from '@/context/TodoContext';
+import { Todo, TodoContext } from '@/context/TodoContext';
+
 import moment from 'moment';
+import {
+  Check,
+  DoNotDisturb,
+  IndeterminateCheckBox,
+} from '@mui/icons-material';
 
 interface ListItemProps {
   item: Todo;
 }
 
 const ListItem: React.FC<ListItemProps> = ({ item }) => {
+  const { todos, setTodos } = useContext(TodoContext);
+
   const relativeTime = moment(item.createdAt).fromNow();
+  const handleSetStatus = () => {
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === item.id
+          ? {
+              ...todo,
+              status: todo.status === 'completed' ? 'pending' : 'completed',
+            }
+          : todo
+      )
+    );
+  };
   return (
-    <li
-      className="flex flex-row items-center justify-between  py-2 shadow-custom"
-      style={{
-        maxWidth: '50ch',
-        borderRadius: '5px',
-        padding: '0 0.5rem',
-        backgroundColor: '#333433',
-      }}
-    >
-      <div>
+    <li className="flex flex-row items-center justify-between py-2 shadow-custom w-full max-w-[50ch] rounded-md px-2 bg-[#333433]">
+      <div className="w-full cursor-pointer" onClick={handleSetStatus}>
         <p
+          className="text-xs text-orange"
           style={{
-            fontSize: '0.8rem',
             color: item.status === 'pending' ? 'orange' : 'yellowgreen',
           }}
         >
-          {item.status}
+          {item.status === 'pending' ? 'pending' : <Check />}
         </p>
-        <p style={{ fontSize: '1rem' }}>{item.itemName}</p>
+        <p className="text-xs">{relativeTime}</p>
       </div>
-      <br />
-      <p style={{ fontSize: '0.8rem' }}>created {relativeTime}</p>
-      <ButtonMenu data={item} />
+      <div className="w-full max-w-[20ch]">
+        <p className="text-base">{item.itemName}</p>
+      </div>
+      <div className="flex flex-row">
+        {' '}
+        {/* Simplified flex container */}
+        <ButtonMenu data={item} />
+      </div>
     </li>
   );
 };

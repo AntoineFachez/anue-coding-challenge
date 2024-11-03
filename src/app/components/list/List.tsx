@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ListItem from '../list-item/ListItem';
 import { Todo } from '@/context/TodoContext';
 import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
@@ -8,46 +8,130 @@ interface ListProps {
 }
 
 const List: React.FC<ListProps> = ({ arrayListItems }) => {
-  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc'); // Type for sortOrder
-  const [sortField, setSortField] = useState<'createdAt' | 'status'>(
-    'createdAt'
-  ); // Type for sortField
+  const [sortOrderCreatedAt, setSortOrderCreatedAt] = useState<'desc' | 'asc'>(
+    'desc'
+  );
+  const [sortOrderStatus, setSortOrderStatus] = useState<'desc' | 'asc'>(
+    'desc'
+  );
+  const [sortOrderItemName, setSortOrderItemName] = useState<'desc' | 'asc'>(
+    'desc'
+  );
+  const [sortedTodos, setSortedTodos] = useState<Todo[]>(arrayListItems); // New state for sorted todos
 
-  const sortedListItems = [...arrayListItems].sort((a, b) => {
-    if (sortField === 'createdAt') {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return sortOrder === 'desc'
-        ? dateB.getTime() - dateA.getTime()
-        : dateA.getTime() - dateB.getTime();
-    } else {
-      // sortField === 'status'
-      return sortOrder === 'desc'
-        ? b.status.localeCompare(a.status)
-        : a.status.localeCompare(b.status);
-    }
-  });
+  useEffect(() => {
+    const sortTodos = () => {
+      const sortedItems = [...arrayListItems].sort((a, b) => {
+        if (sortOrderCreatedAt !== 'desc') {
+          // Sort by createdAt in ascending order
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateA.getTime() - dateB.getTime();
+        } else {
+          // Sort by createdAt in descending order (default)
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB.getTime() - dateA.getTime();
+        }
+      });
+      setSortedTodos(sortedItems);
+    };
+
+    sortTodos();
+  }, [arrayListItems, sortOrderCreatedAt]);
+
+  useEffect(() => {
+    const sortTodos = () => {
+      const sortedItems = [...arrayListItems].sort((a, b) => {
+        if (sortOrderStatus !== 'desc') {
+          // Sort by itemName in ascending order
+          return a.status.localeCompare(b.status);
+        } else {
+          // Sort by status in descending order
+          return b.status.localeCompare(a.status);
+        }
+      });
+      setSortedTodos(sortedItems);
+    };
+
+    sortTodos();
+  }, [arrayListItems, sortOrderStatus]);
+  useEffect(() => {
+    const sortTodos = () => {
+      const sortedItems = [...arrayListItems].sort((a, b) => {
+        if (sortOrderItemName !== 'desc') {
+          // Sort by itemName in ascending order
+          return a.itemName.localeCompare(b.itemName);
+        } else {
+          // Sort by itemName in descending order
+          return b.itemName.localeCompare(a.itemName);
+        }
+      });
+      setSortedTodos(sortedItems);
+    };
+
+    sortTodos();
+  }, [arrayListItems, sortOrderItemName]);
   return (
     <>
-      <div>
-        {' '}
-        {/* Wrap buttons in a div */}
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexFlow: 'row',
+          justifyContent: 'flex-start',
+          padding: '2rem',
+        }}
+      >
         <button
-          onClick={() => setSortOrder(sortOrder === 'desc' ? 'asc' : 'desc')}
-        >
-          {sortOrder === 'desc' ? <ArrowUpward /> : <ArrowDownward />}
-        </button>
-        <button
+          style={{ width: '100%' }}
           onClick={() =>
-            setSortField(sortField === 'createdAt' ? 'status' : 'createdAt')
+            setSortOrderStatus(sortOrderStatus === 'desc' ? 'asc' : 'desc')
           }
         >
-          Sort by {sortField === 'createdAt' ? 'Status' : 'Date'}
+          Status{' '}
+          {sortOrderStatus === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
+        </button>
+        <button
+          style={{ width: '100%' }}
+          onClick={() =>
+            setSortOrderCreatedAt(
+              sortOrderCreatedAt === 'desc' ? 'asc' : 'desc'
+            )
+          }
+        >
+          Created At{' '}
+          {sortOrderCreatedAt === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
+        </button>
+        <button
+          style={{ width: '100%' }}
+          onClick={() =>
+            setSortOrderItemName(sortOrderItemName === 'desc' ? 'asc' : 'desc')
+          }
+        >
+          Name{' '}
+          {sortOrderItemName === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
         </button>
       </div>
-      {sortedListItems.map((item, index) => (
-        <ListItem key={index} item={item} />
-      ))}
+      <ul
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexFlow: 'column',
+          justifyContent: 'space-around',
+          gap: '1rem',
+        }}
+      >
+        {/* Conditionally render the sorted list based on the active sort */}
+        {sortedTodos.map(
+          (
+            item,
+            index // Use sortedTodos here
+          ) => (
+            <ListItem key={index} item={item} />
+          )
+        )}
+      </ul>
     </>
   );
 };
