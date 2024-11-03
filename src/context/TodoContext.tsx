@@ -7,10 +7,12 @@ interface Todo {
   itemName: string;
   status: 'pending' | 'completed';
   createdAt: string;
+  priority: number;
 }
 const scheme: Todo = {
   itemName: 'Go for a run',
   status: 'pending',
+  priority: 1,
   createdAt: new Date().toISOString(),
   id: crypto.randomUUID(),
 };
