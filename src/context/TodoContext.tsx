@@ -29,15 +29,31 @@ interface TodoContextType {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   todoInFocus: Todo | null; // Updated type for todoInFocus
   setTodoInFocus: React.Dispatch<React.SetStateAction<Todo | null>>;
+
+  itemName: string;
+  setItemName: React.Dispatch<React.SetStateAction<string>>;
+  selectedDateTime: Date;
+  setSelectedDateTime: React.Dispatch<React.SetStateAction<Date>>;
+  selectedPriority: number;
+  setSelectedPriority: React.Dispatch<React.SetStateAction<number>>;
+  selectedStatus: string;
+  setSelectedStatus: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const initialTodos: Todo[] = [scheme, ...mockTodoListData];
-
 const TodoContext = createContext<TodoContextType>({
   todos: initialTodos,
   setTodos: () => {},
-  todoInFocus: null, // Initialize todoInFocus as null
+  todoInFocus: null,
   setTodoInFocus: () => {},
+  itemName: '',
+  setItemName: () => {},
+  selectedDateTime: new Date(), // Initialize with current date and time
+  setSelectedDateTime: () => {},
+  selectedPriority: 1,
+  setSelectedPriority: () => {},
+  selectedStatus: '',
+  setSelectedStatus: () => {},
 });
 
 const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -47,7 +63,10 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [data, setData] = useState<string | null>(null);
   const [todoInFocus, setTodoInFocus] = useState<Todo | null>(null);
-
+  const [itemName, setItemName] = useState('celebrate work');
+  const [selectedDateTime, setSelectedDateTime] = useState<Date>(new Date());
+  const [selectedPriority, setSelectedPriority] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState('pending');
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -72,6 +91,15 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
         setTodos,
         todoInFocus,
         setTodoInFocus,
+
+        itemName,
+        setItemName,
+        selectedDateTime,
+        setSelectedDateTime,
+        selectedPriority,
+        setSelectedPriority,
+        selectedStatus,
+        setSelectedStatus,
       }}
     >
       {children}

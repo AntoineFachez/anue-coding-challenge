@@ -11,9 +11,14 @@ import { priorityColor } from '@/utils/colorFns';
 interface ListItemProps {
   item: Todo;
   index: number;
+  handleSetShowForm: () => void;
 }
 
-const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
+const ListItem: React.FC<ListItemProps> = ({
+  item,
+  index,
+  handleSetShowForm,
+}) => {
   const { todos, setTodos, todoInFocus, setTodoInFocus } =
     useContext(TodoContext);
 
@@ -33,15 +38,16 @@ const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
     );
   };
   const handleItemClick = () => {
+    handleSetShowForm();
     setTodoInFocus(item); // Set the clicked item as todoInFocus
   };
 
   return (
     <li
-      className="flex flex-row items-center justify-between py-2 shadow-custom w-full max-w-[50ch] rounded-md px-2 bg-[#333433]"
+      className="w-full h-fit flex flex-row items-center align-items-center rounded-md py-2 px-2 gap-2 bg-[#333433]"
       onClick={handleItemClick}
     >
-      <div className="w-full cursor-pointer" onClick={handleSetStatus}>
+      <div className="w-[20ch] cursor-pointer" onClick={handleSetStatus}>
         <p className="text-xs">No. {index + 1}</p>
         <p
           className="text-xs text-orange"
@@ -56,7 +62,7 @@ const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
           <p className="text-xs">{relativeTimeUntil}</p>
         )}
       </div>
-      <div className="w-full max-w-[20ch]">
+      <div className="w-full items-center">
         <p style={{ color: priorityColor(item.priority, item.status) }}>
           {item.itemName}
         </p>

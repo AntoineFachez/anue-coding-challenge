@@ -3,18 +3,37 @@
 import { useContext, useEffect, useState } from 'react';
 import { Todo, TodoContext } from '@/context/TodoContext';
 import Button from '../button/Button';
-import { Add, Clear, Save } from '@mui/icons-material';
+import { Add, Clear, Close, Save } from '@mui/icons-material';
 // import PrivateOrBusinessSelector from '../selector/Selector';
 import PrioritySlider from '../slider/Slider';
 import DateInput from '../date-selector/DateSelector';
 
-const TodoForm: React.FC = () => {
-  const { todos, setTodos, todoInFocus } = useContext(TodoContext);
+interface TodoFormProps {
+  onClickHandler: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void; // Correct type
+}
+
+const TodoForm: React.FC<TodoFormProps> = ({ onClickHandler }) => {
+  const {
+    todos,
+    setTodos,
+    todoInFocus,
+
+    // itemName,
+    // setItemName,
+    // selectedDateTime,
+    // setSelectedDateTime,
+    // selectedPriority,
+    // setSelectedPriority,
+    // selectedStatus,
+    // setSelectedStatus,
+  } = useContext(TodoContext);
+
   const [itemName, setItemName] = useState('celebrate work');
   const [selectedDateTime, setSelectedDateTime] = useState('');
   const [selectedPriority, setSelectedPriority] = useState(1);
   const [selectedStatus, setSelectedStatus] = useState('pending');
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -53,57 +72,45 @@ const TodoForm: React.FC = () => {
     }
   }, [todoInFocus]);
   return (
-    <form onSubmit={handleSubmit} action="/api/toDos" method="POST">
-      <div
-        style={{
-          display: 'flex',
-          flexFlow: 'column',
-          borderRadius: '3px',
-          padding: '0.5rem',
-          color: 'white',
-        }}
-      >
-        <label htmlFor="itemName">What do you want to get done?</label>
-        <br />
-        <div>
-          <input
-            type="text"
-            id="itemName"
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
-            required
-            style={{
-              borderRadius: '3px',
-              padding: '0.2rem 0.5rem',
-              color: 'black',
-            }}
-          />
-          {itemName && (
-            <Button
-              onClickHandler={handleReset}
-              icon={<Clear />}
-              appearance="action"
+    <form
+      onSubmit={handleSubmit}
+      action="/api/toDos"
+      method="POST"
+      className="w-[25rem] h-[25rem] flex flex-col justify-between bg-[#333433] p-4"
+    >
+      {/* <Button icon={<Close />} onClickHandler={onClickHandler} /> */}
+      <div className="w-full h-full flex flex-col justify-between rounded-md p-2 text-white bg-[#333433]">
+        <div className="w-full h-fit rounded-md text-white bg-[#333433]">
+          <label htmlFor="itemName">What do you want to get done?</label>
+          <div className="w-full flex flex-row rounded-md text-white bg-[#333433]">
+            <input
+              type="text"
+              id="itemName"
+              value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
+              required
+              className="w-full rounded-md p-1 text-black"
             />
-          )}
+            {itemName && (
+              <Button
+                onClickHandler={handleReset}
+                icon={<Clear />}
+                innerHtml="cancel"
+                appearance="action"
+              />
+            )}
+          </div>
         </div>
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'row',
-          }}
-        >
+        <div className="flex flex-col">
+          <label htmlFor="dateTimeInput">Until when?</label>
           <DateInput
             selectedDateTime={selectedDateTime}
             setSelectedDateTime={setSelectedDateTime}
           />
         </div>
         <div>{selectedStatus}</div>
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'row',
-          }}
-        >
+        <div className="flex flex-col">
+          <label htmlFor="prioritySlider">Priority? {selectedPriority}</label>
           <PrioritySlider
             onPriorityChange={(priority) => {
               setSelectedPriority(priority);
@@ -113,16 +120,12 @@ const TodoForm: React.FC = () => {
           />
         </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-        }}
-      >
+      <div className="flex justify-end">
         <Button
           onClickHandler={handleSubmit}
           type="submit"
           icon={<Add />}
+          innerHtml="save"
           appearance={itemName ? 'action' : 'default'}
         />
       </div>

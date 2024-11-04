@@ -118,25 +118,33 @@ const SortMenu: React.FC<SortMenuProps> = ({
     <div
       style={{
         width: '100%',
+        height: '50px',
+        backgroundColor: '#333433',
+        color: '#ffffff',
+        borderRadius: '3px',
         display: 'flex',
         flexFlow: 'row',
         justifyContent: 'flex-start',
-        padding: '2rem',
+        // padding: '2rem',
       }}
     >
-      {' '}
-      <button style={{ width: '100%' }} onClick={() => handleSort('priority')}>
-        Priority{' '}
-        {sortOrder.priority === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
-      </button>
-      <button style={{ width: '100%' }} onClick={() => handleSort('status')}>
-        Status{' '}
-        {sortOrder.status === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
-      </button>
-      <button style={{ width: '100%' }} onClick={() => handleSort('createdAt')}>
+      <div className="w-full flex flex-row gap-2">
+        <button style={{ width: '100%' }} onClick={() => handleSort('status')}>
+          Status{' '}
+          {sortOrder.status === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
+        </button>
+        <button
+          style={{ width: '100%' }}
+          onClick={() => handleSort('priority')}
+        >
+          Priority{' '}
+          {sortOrder.priority === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
+        </button>
+      </div>
+      {/* <button style={{ width: '100%' }} onClick={() => handleSort('createdAt')}>
         Created At{' '}
         {sortOrder.createdAt === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
-      </button>
+      </button> */}
       <button
         style={{ width: '100%' }}
         onClick={() => handleSort('getDoneUntil')}
@@ -149,7 +157,7 @@ const SortMenu: React.FC<SortMenuProps> = ({
         )}
       </button>
       <button style={{ width: '100%' }} onClick={() => handleSort('itemName')}>
-        Name{' '}
+        Title{' '}
         {sortOrder.itemName === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
       </button>
     </div>

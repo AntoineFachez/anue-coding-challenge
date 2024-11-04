@@ -34,26 +34,18 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
     setSelectedDateTime(event.target.value);
   };
 
-  // Add this useEffect to log the value after it's updated
-  useEffect(() => {
-    console.log('internalDateTime:', internalDateTime);
-  }, [internalDateTime]);
-
   return (
-    <>
-      <label htmlFor="dateTimeInput">Until when:</label>
-      <input
-        type="datetime-local"
-        id="dateTimeInput"
-        value={internalDateTime}
-        onChange={handleChange}
-        style={{
-          borderRadius: '3px',
-          padding: '0.2rem 0.5rem',
-          color: 'black',
-        }}
-      />
-    </>
+    <input
+      type="datetime-local"
+      id="dateTimeInput"
+      value={internalDateTime}
+      onChange={handleChange}
+      style={{
+        borderRadius: '3px',
+        padding: '0.2rem 0.5rem',
+        color: 'black',
+      }}
+    />
   );
 };
 

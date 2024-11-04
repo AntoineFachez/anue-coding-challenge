@@ -22,7 +22,6 @@ const PrioritySlider: React.FC<PrioritySliderProps> = ({
 
   return (
     <>
-      <label htmlFor="prioritySlider">Priority:</label>
       <input
         type="range"
         id="prioritySlider"
