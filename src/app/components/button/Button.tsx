@@ -2,25 +2,28 @@
 import React, { ButtonHTMLAttributes } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  onClickHandler: () => void;
+  onClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void; // Add event parameter
+
   innerHtml?: string;
-  icon?: React.ReactNode; // Use ReactNode for the icon prop
+  icon?: React.ReactNode;
+  appearance?: 'action' | 'default';
 }
 
 const Button: React.FC<ButtonProps> = ({
   onClickHandler,
-  innerHtml,
-  children,
   icon,
+  appearance = 'default',
 }) => {
   return (
     <button
       onClick={onClickHandler}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      className={
+        appearance === 'action'
+          ? `bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`
+          : `bg-grey-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded`
+      }
     >
-      {/* {innerHtml || children}  */}
       {icon}
-      {/* Use innerHtml if provided, otherwise use children */}
     </button>
   );
 };

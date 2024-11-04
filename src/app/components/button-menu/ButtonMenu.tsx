@@ -21,16 +21,18 @@ const MyButton: React.FC<MyButtonProps> = ({ data }) => {
 
   return (
     <>
-      <Button
-        onClickHandler={() => handleSetItem('set')}
-        innerHtml="Store Value"
-        icon={<Save />}
-      />
-      <Button
-        onClickHandler={() => handleSetItem('delete')}
-        innerHtml="Delete Value"
-        icon={<Delete />}
-      />
+      {data.saved ? (
+        <Button
+          onClickHandler={() => handleSetItem('delete')}
+          icon={<Delete />}
+        />
+      ) : (
+        <Button
+          onClickHandler={() => handleSetItem('set')}
+          icon={<Save />}
+          appearance="action"
+        />
+      )}
     </>
   );
 };

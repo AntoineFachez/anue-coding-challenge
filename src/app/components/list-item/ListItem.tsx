@@ -10,6 +10,7 @@ import {
   DoNotDisturb,
   IndeterminateCheckBox,
 } from '@mui/icons-material';
+import { priorityColor } from '@/utils/colorFns';
 
 interface ListItemProps {
   item: Todo;
@@ -32,26 +33,7 @@ const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
       )
     );
   };
-  const priorityColor = (priority: number, status: string) => {
-    if (status === 'completed') {
-      return 'gray';
-    }
 
-    switch (priority) {
-      case 5:
-      case 6:
-        return 'red'; // Highest priority (pending)
-      case 4:
-        return 'orange'; // High priority (pending)
-      case 3:
-        return 'yellow'; // Medium priority (pending)
-      case 2:
-      case 1:
-        return 'green'; // Low priority (pending)
-      default:
-        return 'blue'; // Default color (if priority is not in the expected range)
-    }
-  };
   return (
     <li className="flex flex-row items-center justify-between py-2 shadow-custom w-full max-w-[50ch] rounded-md px-2 bg-[#333433]">
       <div className="w-full cursor-pointer" onClick={handleSetStatus}>

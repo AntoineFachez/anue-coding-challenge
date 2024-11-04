@@ -7,6 +7,7 @@ const mockTodoListData = [
     priority: 3,
     itemName: 'Buy groceries',
     status: 'pending',
+    saved: true,
     createdAt: '2024-10-30T10:00:00Z',
   },
   {
@@ -15,6 +16,7 @@ const mockTodoListData = [
     priority: 5,
     itemName: 'Finish report',
     status: 'completed',
+    saved: true,
     createdAt: '2024-10-29T14:30:00Z',
   },
   {
@@ -23,6 +25,7 @@ const mockTodoListData = [
     priority: 2,
     itemName: 'Book doctor appointment',
     status: 'pending',
+    saved: true,
     createdAt: '2024-10-28T09:15:00Z',
   },
   {
@@ -31,6 +34,7 @@ const mockTodoListData = [
     priority: 3,
     itemName: 'Call mom',
     status: 'completed',
+    saved: true,
     createdAt: '2024-10-27T18:00:00Z',
   },
   {
@@ -39,6 +43,7 @@ const mockTodoListData = [
     priority: 4,
     itemName: 'Pay bills',
     status: 'pending',
+    saved: true,
     createdAt: '2024-10-26T11:45:00Z',
   },
 ];

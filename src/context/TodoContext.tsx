@@ -8,6 +8,7 @@ interface Todo {
   status: 'pending' | 'completed';
   createdAt: string;
   priority: number;
+  saved: boolean;
 }
 const scheme: Todo = {
   itemName: 'Go for a run',
@@ -15,6 +16,7 @@ const scheme: Todo = {
   priority: 1,
   createdAt: new Date().toISOString(),
   id: crypto.randomUUID(),
+  saved: false,
 };
 interface TodoContextType {
   todos: Todo[];
