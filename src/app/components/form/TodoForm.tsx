@@ -4,14 +4,15 @@ import { useContext, useState } from 'react';
 import { Todo, TodoContext } from '@/context/TodoContext';
 import Button from '../button/Button';
 import { Add, Clear, Save } from '@mui/icons-material';
-import PrioritySelector from '../selector/Selector';
+// import PrioritySelector from '../selector/Selector';
 import PrioritySlider from '../slider/Slider';
+import DateInput from '../date-selector/DateSelector';
 
 const TodoForm: React.FC = () => {
   const { todos, setTodos } = useContext(TodoContext);
   const [itemName, setItemName] = useState('celebrate work');
-
-  const [selectedPriority, setSelectedPriority] = useState(0);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState(1);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -21,7 +22,7 @@ const TodoForm: React.FC = () => {
       status: 'pending',
       createdAt: new Date().toISOString(),
       id: crypto.randomUUID(),
-      priority: 0,
+      priority: selectedPriority,
       saved: false,
     };
 
@@ -32,6 +33,8 @@ const TodoForm: React.FC = () => {
   const handleReset = (event: React.MouseEvent) => {
     event.preventDefault(); // Prevent form submission
     console.log('clicked');
+    setItemName('');
+    setSelectedPriority(1);
   };
   return (
     <form onSubmit={handleSubmit} action="/api/toDos" method="POST">
@@ -44,7 +47,7 @@ const TodoForm: React.FC = () => {
           color: 'white',
         }}
       >
-        <label htmlFor="itemName">What do you want to do?</label>
+        <label htmlFor="itemName">What do you want to get done?</label>
         <br />
         <div>
           <input
@@ -67,6 +70,18 @@ const TodoForm: React.FC = () => {
             />
           )}
         </div>
+        <div
+          style={{
+            display: 'flex',
+            flexFlow: 'row',
+          }}
+        >
+          <DateInput
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        </div>
+
         <div
           style={{
             display: 'flex',

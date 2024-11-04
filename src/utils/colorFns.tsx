@@ -15,6 +15,6 @@ export const priorityColor = (priority: number, status: string) => {
     case 1:
       return 'green'; // Low priority (pending)
     default:
-      return 'blue'; // Default color (if priority is not in the expected range)
+      return 'lightblue'; // Default color (if priority is not in the expected range)
   }
 };
