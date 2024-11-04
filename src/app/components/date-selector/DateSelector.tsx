@@ -1,33 +1,51 @@
 'use client';
 
-import React, { useState } from 'react';
-interface DateInputProps {
-  selectedDate: string;
-  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+import React, { useEffect, useState } from 'react';
+
+interface DateTimeInputProps {
+  selectedDateTime: string;
+  setSelectedDateTime: React.Dispatch<React.SetStateAction<string>>;
 }
-const DateInput: React.FC<DateInputProps> = ({
-  selectedDate,
-  setSelectedDate,
+
+const DateTimeInput: React.FC<DateTimeInputProps> = ({
+  selectedDateTime,
+  setSelectedDateTime,
 }) => {
+  const [internalDateTime, setInternalDateTime] = useState(selectedDateTime);
+
+  useEffect(() => {
+    // Format the date to YYYY-MM-DDTHH:mm
+    const formattedDateTime = new Date(selectedDateTime)
+      .toLocaleString('sv-SE', {
+        // Use Swedish locale for the desired format
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      .replace(' ', 'T'); // Replace space with 'T'
+
+    setInternalDateTime(formattedDateTime);
+  }, [selectedDateTime]);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(event.target.value);
+    setInternalDateTime(event.target.value);
+    setSelectedDateTime(event.target.value);
   };
+
+  // Add this useEffect to log the value after it's updated
+  useEffect(() => {
+    console.log('internalDateTime:', internalDateTime);
+  }, [internalDateTime]);
 
   return (
     <>
-      <label htmlFor="dateInput">Finish until:</label>
-      {/* <input
-        type="date"
-        id="start"
-        name="trip-start"
-        value="2018-07-22"
-        min="2018-01-01"
-        max="2018-12-31"
-      /> */}
+      <label htmlFor="dateTimeInput">Until when:</label>
       <input
-        type="date"
-        id="dateInput"
-        value={selectedDate}
+        type="datetime-local"
+        id="dateTimeInput"
+        value={internalDateTime}
         onChange={handleChange}
         style={{
           borderRadius: '3px',
@@ -39,4 +57,4 @@ const DateInput: React.FC<DateInputProps> = ({
   );
 };
 
-export default DateInput;
+export default DateTimeInput;

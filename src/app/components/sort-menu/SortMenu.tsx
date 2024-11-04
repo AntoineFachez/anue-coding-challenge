@@ -11,6 +11,7 @@ const SortMenu: React.FC<SortMenuProps> = ({
 }) => {
   const [sortOrder, setSortOrder] = useState({
     createdAt: 'desc',
+    getDoneUntil: 'desc',
     status: 'desc',
     itemName: 'desc',
     priority: 'desc',
@@ -36,6 +37,26 @@ const SortMenu: React.FC<SortMenuProps> = ({
 
     sortTodos();
   }, [arrayListItems, sortOrder.createdAt]);
+  useEffect(() => {
+    const sortTodos = () => {
+      const sortedItems = [...arrayListItems].sort((a, b) => {
+        if (sortOrder.getDoneUntil !== 'desc') {
+          // Sort by getDoneUntil in ascending order
+          const dateA = new Date(a.getDoneUntil);
+          const dateB = new Date(b.getDoneUntil);
+          return dateA.getTime() - dateB.getTime();
+        } else {
+          // Sort by getDoneUntil in descending order (default)
+          const dateA = new Date(a.getDoneUntil);
+          const dateB = new Date(b.getDoneUntil);
+          return dateB.getTime() - dateA.getTime();
+        }
+      });
+      setSortedTodos(sortedItems);
+    };
+
+    sortTodos();
+  }, [arrayListItems, sortOrder.getDoneUntil]);
 
   useEffect(() => {
     const sortTodos = () => {
@@ -115,6 +136,17 @@ const SortMenu: React.FC<SortMenuProps> = ({
       <button style={{ width: '100%' }} onClick={() => handleSort('createdAt')}>
         Created At{' '}
         {sortOrder.createdAt === 'desc' ? <ArrowDownward /> : <ArrowUpward />}
+      </button>
+      <button
+        style={{ width: '100%' }}
+        onClick={() => handleSort('getDoneUntil')}
+      >
+        Get done Until{' '}
+        {sortOrder.getDoneUntil === 'desc' ? (
+          <ArrowDownward />
+        ) : (
+          <ArrowUpward />
+        )}
       </button>
       <button style={{ width: '100%' }} onClick={() => handleSort('itemName')}>
         Name{' '}

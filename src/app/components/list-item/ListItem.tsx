@@ -5,11 +5,7 @@ import ButtonMenu from '../button-menu/ButtonMenu';
 import { Todo, TodoContext } from '@/context/TodoContext';
 
 import moment from 'moment';
-import {
-  Check,
-  DoNotDisturb,
-  IndeterminateCheckBox,
-} from '@mui/icons-material';
+import { Check } from '@mui/icons-material';
 import { priorityColor } from '@/utils/colorFns';
 
 interface ListItemProps {
@@ -18,9 +14,12 @@ interface ListItemProps {
 }
 
 const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
-  const { todos, setTodos } = useContext(TodoContext);
+  const { todos, setTodos, todoInFocus, setTodoInFocus } =
+    useContext(TodoContext);
 
-  const relativeTime = moment(item.createdAt).fromNow();
+  const relativeTimeSince = moment(item.createdAt).fromNow();
+  const relativeTimeUntil = moment(item.getDoneUntil).fromNow(true) + ' left';
+
   const handleSetStatus = () => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -33,9 +32,15 @@ const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
       )
     );
   };
+  const handleItemClick = () => {
+    setTodoInFocus(item); // Set the clicked item as todoInFocus
+  };
 
   return (
-    <li className="flex flex-row items-center justify-between py-2 shadow-custom w-full max-w-[50ch] rounded-md px-2 bg-[#333433]">
+    <li
+      className="flex flex-row items-center justify-between py-2 shadow-custom w-full max-w-[50ch] rounded-md px-2 bg-[#333433]"
+      onClick={handleItemClick}
+    >
       <div className="w-full cursor-pointer" onClick={handleSetStatus}>
         <p className="text-xs">No. {index + 1}</p>
         <p
@@ -46,17 +51,17 @@ const ListItem: React.FC<ListItemProps> = ({ item, index }) => {
         >
           {item.status === 'pending' ? 'pending' : <Check />}
         </p>
-        <p className="text-xs">{relativeTime}</p>
+        {/* <p className="text-xs">{relativeTimeSince}</p> */}
+        {item.status === 'pending' && (
+          <p className="text-xs">{relativeTimeUntil}</p>
+        )}
       </div>
       <div className="w-full max-w-[20ch]">
         <p style={{ color: priorityColor(item.priority, item.status) }}>
-          {/* {item.priority} */}
           {item.itemName}
         </p>
       </div>
       <div className="flex flex-row">
-        {' '}
-        {/* Simplified flex container */}
         <ButtonMenu data={item} />
       </div>
     </li>

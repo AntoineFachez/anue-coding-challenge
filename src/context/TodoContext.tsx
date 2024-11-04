@@ -4,32 +4,40 @@ import { mockTodoListData } from '../mockData/mockData';
 
 interface Todo {
   id: any;
+  orderIndex: number;
   itemName: string;
   status: 'pending' | 'completed';
   createdAt: string;
+  getDoneUntil: string;
   priority: number;
   saved: boolean;
+  private: boolean;
 }
 const scheme: Todo = {
+  orderIndex: 0,
   itemName: 'Go for a run',
   status: 'pending',
   priority: 1,
   createdAt: new Date().toISOString(),
+  getDoneUntil: new Date().toISOString(),
   id: crypto.randomUUID(),
   saved: false,
+  private: true,
 };
 interface TodoContextType {
   todos: Todo[];
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
-  // scheme: scheme;
+  todoInFocus: Todo | null; // Updated type for todoInFocus
+  setTodoInFocus: React.Dispatch<React.SetStateAction<Todo | null>>;
 }
 
-const initialTodos: Todo[] = mockTodoListData;
+const initialTodos: Todo[] = [scheme, ...mockTodoListData];
 
 const TodoContext = createContext<TodoContextType>({
   todos: initialTodos,
   setTodos: () => {},
-  // scheme: scheme,
+  todoInFocus: null, // Initialize todoInFocus as null
+  setTodoInFocus: () => {},
 });
 
 const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -38,6 +46,7 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
   // Explicitly type 'children'
   const [todos, setTodos] = useState<Todo[]>(initialTodos);
   const [data, setData] = useState<string | null>(null);
+  const [todoInFocus, setTodoInFocus] = useState<Todo | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +70,8 @@ const TodoProvider: React.FC<{ children: React.ReactNode }> = ({
       value={{
         todos,
         setTodos,
-        // scheme
+        todoInFocus,
+        setTodoInFocus,
       }}
     >
       {children}

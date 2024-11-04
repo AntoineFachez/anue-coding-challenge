@@ -1,6 +1,7 @@
+import { Todo } from '@/context/TodoContext';
 import { v4 as uuidv4 } from 'uuid';
 
-const mockTodoListData = [
+const mockTodoListData: Todo[] = [
   {
     id: '69601d06-1e2b-450e-83bd-ebea21139aee',
     orderIndex: 0,
@@ -10,6 +11,7 @@ const mockTodoListData = [
     saved: true,
     createdAt: '2024-10-30T10:00:00Z',
     getDoneUntil: '2024-11-23T10:00:00Z',
+    private: true,
   },
   {
     id: 'fe26ed5d-292b-4ccb-b4a6-327b3bbc824e',
@@ -20,6 +22,7 @@ const mockTodoListData = [
     saved: true,
     createdAt: '2024-10-29T14:30:00Z',
     getDoneUntil: '2024-10-30T14:30:00Z',
+    private: false,
   },
   {
     id: 'b840cb9b-d25c-408e-bf65-528215bdedff',
@@ -30,6 +33,7 @@ const mockTodoListData = [
     saved: true,
     createdAt: '2024-10-28T09:15:00Z',
     getDoneUntil: '2024-12-03T09:15:00Z',
+    private: true,
   },
   {
     id: '4ef9b265-4501-4c2f-b7a8-481e5a9235f8',
@@ -39,7 +43,8 @@ const mockTodoListData = [
     status: 'completed',
     saved: true,
     createdAt: '2024-10-27T18:00:00Z',
-    getDoneUntil: '2024-11-31T18:00:00Z',
+    getDoneUntil: '2024-11-30T18:00:00Z',
+    private: true,
   },
   {
     id: 'b2654ef9-b7a8-4c2f-4501-481e5a9235f8',
@@ -50,6 +55,7 @@ const mockTodoListData = [
     saved: true,
     createdAt: '2024-10-26T11:45:00Z',
     getDoneUntil: '2024-10-26T12:45:00Z',
+    private: true,
   },
 ];
 

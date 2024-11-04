@@ -5,16 +5,18 @@ import React, { useState } from 'react';
 
 interface PrioritySliderProps {
   onPriorityChange: (priority: number) => void;
+  selectedPriority: number;
+  setSelectedPriority: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const PrioritySlider: React.FC<PrioritySliderProps> = ({
   onPriorityChange,
+  selectedPriority,
+  setSelectedPriority,
 }) => {
-  const [priority, setPriority] = useState(0);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newPriority = parseInt(event.target.value, 10);
-    setPriority(newPriority);
+    setSelectedPriority(newPriority);
     onPriorityChange(newPriority);
   };
 
@@ -26,10 +28,10 @@ const PrioritySlider: React.FC<PrioritySliderProps> = ({
         id="prioritySlider"
         min="0"
         max="5"
-        value={priority}
+        value={selectedPriority}
         onChange={handleChange}
         style={{
-          accentColor: priorityColor(priority, 'pending'), // Use accentColor for the slider's color
+          accentColor: priorityColor(selectedPriority, 'pending'), // Use accentColor for the slider's color
         }}
       />
     </>

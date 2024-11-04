@@ -1,18 +1,19 @@
 'use client';
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Todo, TodoContext } from '@/context/TodoContext';
 import Button from '../button/Button';
 import { Add, Clear, Save } from '@mui/icons-material';
-// import PrioritySelector from '../selector/Selector';
+// import PrivateOrBusinessSelector from '../selector/Selector';
 import PrioritySlider from '../slider/Slider';
 import DateInput from '../date-selector/DateSelector';
 
 const TodoForm: React.FC = () => {
-  const { todos, setTodos } = useContext(TodoContext);
+  const { todos, setTodos, todoInFocus } = useContext(TodoContext);
   const [itemName, setItemName] = useState('celebrate work');
-  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedDateTime, setSelectedDateTime] = useState('');
   const [selectedPriority, setSelectedPriority] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState('pending');
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -21,21 +22,36 @@ const TodoForm: React.FC = () => {
       itemName,
       status: 'pending',
       createdAt: new Date().toISOString(),
+      getDoneUntil: selectedDateTime,
       id: crypto.randomUUID(),
       priority: selectedPriority,
       saved: false,
+      orderIndex: 0,
+      private: false,
     };
 
     setTodos([...todos, newTodo]);
 
     setItemName('');
+    setSelectedPriority(1);
+    setSelectedStatus('pending');
+    setSelectedDateTime('');
   };
   const handleReset = (event: React.MouseEvent) => {
-    event.preventDefault(); // Prevent form submission
-    console.log('clicked');
+    event.preventDefault();
     setItemName('');
     setSelectedPriority(1);
+    setSelectedStatus('pending');
+    setSelectedDateTime('');
   };
+  useEffect(() => {
+    if (todoInFocus != null) {
+      setItemName(todoInFocus.itemName);
+      setSelectedDateTime(todoInFocus.getDoneUntil);
+      setSelectedPriority(todoInFocus.priority);
+      setSelectedStatus(todoInFocus.status);
+    }
+  }, [todoInFocus]);
   return (
     <form onSubmit={handleSubmit} action="/api/toDos" method="POST">
       <div
@@ -77,11 +93,11 @@ const TodoForm: React.FC = () => {
           }}
         >
           <DateInput
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
+            selectedDateTime={selectedDateTime}
+            setSelectedDateTime={setSelectedDateTime}
           />
         </div>
-
+        <div>{selectedStatus}</div>
         <div
           style={{
             display: 'flex',
@@ -92,6 +108,8 @@ const TodoForm: React.FC = () => {
             onPriorityChange={(priority) => {
               setSelectedPriority(priority);
             }}
+            selectedPriority={selectedPriority}
+            setSelectedPriority={setSelectedPriority}
           />
         </div>
       </div>
